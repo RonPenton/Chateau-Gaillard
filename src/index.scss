@@ -1,0 +1,79 @@
+.game {
+    display: grid;
+    grid-template-rows: 50px auto 40px;
+    grid-template-areas: "top" "output" "input";
+    background: black;
+    height: 100vh;
+}
+
+.top-bar {
+    grid-area: top;
+}
+
+.output-area {
+    grid-area: output;
+    font-family: 'Roboto Mono', monospace;
+    padding-left: 4px;
+    padding-right: 4px;
+    overflow-y: scroll;
+    color: white;
+}
+
+.input-area {
+    max-height: 40px;
+    grid-area: input;
+    font-family: 'Roboto Mono', monospace;
+    background: white;
+    color: black;
+    margin: 0;
+
+    .button {
+        margin: 0;
+    }
+}
+
+.generic {
+    color: #eeeeee;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+}
+
+
+.user-input {
+    color: white;
+    font-weight: bold;
+}
+
+.debug {
+    background-color: #0068A8;
+    color: white;
+    font-weight: bold;
+    display: inline-block;
+}
+
+hr.divider {
+    overflow: visible; /* For IE */
+    padding: 0;
+    border: none;
+    border-top: medium double #DDD;
+    color: #DDD;
+    text-align: center;
+    max-width: initial;
+    margin-top: 0.6rem;
+    margin-bottom: 0.6rem;
+    
+    &:after {
+        content: "§";
+        display: inline-block;
+        position: relative;
+        top: -0.95em;
+        font-size: 1em;
+        padding: 0 0.25em;
+        background: black;
+    }
+}
+
+
