@@ -1,25 +1,5 @@
 import Random from 'ts-random';
-
-const statNames = ['strength', 'charisma', 'dexterity', 'intelligence', 'wisdom', 'constitution'] as const;
-
-type Stats = typeof statNames[number];
-
-type PlayerStats = {
-    [K in Stats]: number;
-};
-
-function generateStat(random: Random): number {
-    return random.int(1, 6) + random.int(1, 6) + random.int(1, 6) + 3;
-}
-
-function generateStats(random: Random): PlayerStats {
-    let stats: any = {};
-    for (const stat of statNames) {
-        stats[stat] = generateStat(random);
-    }
-    return stats;
-}
-
+import { generateStats } from './stats';
 
 
 export function randomize(random: Random) {

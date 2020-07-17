@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/RonPenton/",
   "devDependencies": {
+    "@types/clone-deep": "^4.0.1",
     "@types/react": "^16.9.43",
     "@types/react-dom": "^16.9.8",
     "css-loader": "^3.6.0",
@@ -30,6 +31,7 @@
     "webpack": "^4.43.0"
   },
   "dependencies": {
+    "clone-deep": "^4.0.1",
     "decko": "^1.2.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
