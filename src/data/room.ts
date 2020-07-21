@@ -1,5 +1,7 @@
 import cloneDeep from 'clone-deep';
 import { Items, Item } from './item';
+import Random from 'ts-random';
+import { monsterTemplates, randomize as randomizeMonster } from './monster';
 
 const directions = ['north', 'south', 'east', 'west', 'up', 'down'] as const;
 const shortDirections = ['n', 's', 'e', 'w', 'u', 'd'] as const;
@@ -28,19 +30,48 @@ export interface Room {
 export const getRooms = () => {
     const clone = cloneDeep(rooms);
 
-
+    const random = new Random((new Date()).toISOString());
+    fillItems(clone, random);
+    fillMonsters(clone, random);
 
     return clone;
 }
 
+const getRoom = (random: Random, map: Room[], condition: (room: Room) => boolean): Room => {
+    const room = random.pick(map);
+    if (condition(room))
+        return room;
+    return getRoom(random, map, condition);
+}
+
+const fillItems = (map: Room[], random: Random) => {
+    const itemNames = Object.keys(Items);
+    for (const itemName of itemNames) {
+        const item = Items[itemName];
+
+        // chests and keys are pre-placed.
+        if(item.type == 'chest' || item.type == 'key')
+            continue;
+
+        const room = getRoom(random, map, room => !room.noItems && room.items.length == 0);
+        room.items.push(item);
+    }
+}
+
+const fillMonsters = (map: Room[], random: Random) => {
+    const monsterNames = Object.keys(monsterTemplates)
+    for(const monsterName of monsterNames) {
+        const template = monsterTemplates[monsterName];
+        const monster = randomizeMonster(template, random);
+        if(monster.nonplaceable)
+            continue;
+
+        const room = getRoom(random, map, room=> !room.noMonsters && !room.monster);
+        room.monster = monster;
+    }
+}
+
 const rooms: Room[] = [
-    {
-        id: 0,
-        name: "dummy",
-        description: "This room exists because BASIC indexes by 1 and not 0.",
-        exits: [],
-        items: []
-    },
     {
         id: 1,
         name: "Battlements",
