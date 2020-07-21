@@ -172,9 +172,7 @@ HAVE BROKEN THE ";D$
 1380 RETURN
 1390 REM *************
 1400 REM FIGHT ROUTINE
-1410 IF ROOMS(RO,8)=1 THEN PRINT "The dwarf
-refuses to fight":PRINT "and his magic
-protects him":RETURN
+1410 IF ROOMS(RO,8)=1 THEN PRINT "The dwarf refuses to fight":PRINT "and his magic protects him":RETURN
 1420 IF ROOMS(RO,8)<>0 THEN 1470
 1430 R=RND(1)
 1440 IF R<.5 THEN PRINT "There is nothing
@@ -189,62 +187,42 @@ empty air!"
 1510 I1=floor(RND(1)*6+RND(1)*6+RND(1)*6)+3
 1520 W1=floor(RND(1)*6+RND(1)*6+RND(1)*6)+3
 1530 C1=floor(RND(1)*6+RND(1)*6+RND(1)*6)+3
-1540 PRINT
-"------------------------------------------"
+1540 PRINT "------------------------------------------"
 1550 PRINT "YOUR OPPONENT IS A ";G$
 1560 MT=0:HT=0:REM MONSTER TALLY, HUMAN TALLY
 1570 FF=S1*(floor(RND(1)*6)+1)
-1580 PRINT:PRINT
-"---------------------------------------"
-1590 PRINT "THE ";G$;"'S DANGER
-LEVEL IS"FF
+1580 PRINT:PRINT "---------------------------------------"
+1590 PRINT "THE ";G$;"'S DANGER LEVEL IS"FF
 1600 FOR Z=1 TO 1500:NEXT Z
 1610 FOR J=1 TO 5
 1620 T(J)=0
-1630 IF INVENTORY(J)=1 THEN PRINT "YOUR AXE COULD BE
-HANDY":T(J)=1
-1640 IF INVENTORY(J)=2 THEN PRINT "YOUR SKILL WITH
-THE SWORD":PRINT "MAY STAND YOU IN GOOD
-STEAD":T(J)=2
-1650 IF INVENTORY(J)=3 THEN PRINT "YOUR DAGGER IS
-USEFUL AGAINST ";G$;"S":T(J)=3
-1660 IF INVENTORY(J)=4 THEN PRINT "THE MACE WILL MAKE
-SHORT WORK OF IT":T(J)=4
-1670 IF INVENTORY(J)=5 THEN PRINT "YOUR QUARTERSTAFF
-WILL GIVE":PRINT "IT NO
-QUARTER...":T(J)=5
-1680 IF INVENTORY(J)=6 THEN PRINT "SWINGING YOUR
-MORNING STAR MAY INFLICT":PRINT "HEAVY
-WOUNDS ON THE ";G$:T(J)=6
-1690 IF INVENTORY(J)=7 THEN PRINT "A FALCHION IS A
-USEFUL WEAPON":T(J)=7
+1630 IF INVENTORY(J)=1 THEN PRINT "YOUR AXE COULD BE HANDY":T(J)=1
+1640 IF INVENTORY(J)=2 THEN PRINT "YOUR SKILL WITH THE SWORD":PRINT "MAY STAND YOU IN GOOD STEAD":T(J)=2
+1650 IF INVENTORY(J)=3 THEN PRINT "YOUR DAGGER IS USEFUL AGAINST ";G$;"S":T(J)=3
+1660 IF INVENTORY(J)=4 THEN PRINT "THE MACE WILL MAKE SHORT WORK OF IT":T(J)=4
+1670 IF INVENTORY(J)=5 THEN PRINT "YOUR QUARTERSTAFF WILL GIVE":PRINT "IT NO QUARTER...":T(J)=5
+1680 IF INVENTORY(J)=6 THEN PRINT "SWINGING YOUR MORNING STAR MAY INFLICT":PRINT "HEAVY WOUNDS ON THE ";G$:T(J)=6
+1690 IF INVENTORY(J)=7 THEN PRINT "A FALCHION IS A USEFUL WEAPON":T(J)=7
 1700 NEXT J
 1710 FLAG=0
 1720 FOR J=1 TO 5
 1730 IF T(J)<>0 THEN FLAG=FLAG+1
 1740 NEXT J
-1750 IF FLAG=0 THEN PRINT "YOU MUST FIGHT THE
-";G$;" WITH":PRINT "YOUR BARE
-HANDS":GOTO 1910
+1750 IF FLAG=0 THEN PRINT "YOU MUST FIGHT THE ";G$;" WITH":PRINT "YOUR BARE HANDS":GOTO 1910
 1760 IF FLAG>1 THEN 1830
 1770 FOR J=1 TO 5
 1780 IF T(J)<>0 THEN FLAG=T(J)
 1790 NEXT J
-1800 PRINT "YOU MUST FIGHT WITH YOUR
-";ITEMNAME(FLAG)
+1800 PRINT "YOU MUST FIGHT WITH YOUR ";ITEMNAME(FLAG)
 1810 FF=floor(FF*2/FLAG)
 1820 GOTO 1910
 1830 PRINT "CHOOSE YOUR WEAPON:"
 1840 FOR J=1 TO 5
-1850 IF INVENTORY(J)<>0 THEN PRINT J;" -
-";ITEMNAME(J)
+1850 IF INVENTORY(J)<>0 THEN PRINT J;" - ";ITEMNAME(J)
 1860 NEXT J
-1870 INPUT "Enter the number to
-choose";J
-1880 IF INVENTORY(J)=0 THEN PRINT "YOU DO NOT HAVE
-THE ";ITEMNAME(J):GOTO 1870
-1890 PRINT "RIGHT, SO YOU CHOOSE TO
-FIGHT":PRINT "WITH THE ";ITEMNAME(J)
+1870 INPUT "Enter the number to choose";J
+1880 IF INVENTORY(J)=0 THEN PRINT "YOU DO NOT HAVE THE ";ITEMNAME(J):GOTO 1870
+1890 PRINT "RIGHT, SO YOU CHOOSE TO FIGHT":PRINT "WITH THE ";ITEMNAME(J)
 1900 FF=floor(FF*2/J)
 1910 FOR Z=1 TO 1500:NEXT Z
 1920 PRINT "THE ";G$;" HAS THE
@@ -352,7 +330,7 @@ ADVENTURE"
 2590
 SC=(SC+20*CASH+47*MK+ST+2*CH+3*DE+4+IT+5*WI+6*CO)/QU
 2600 IF MK>0 THEN PRINT "YOU
-KILLED"MK"MONSTERS"
+KILLED"MK"MONSTERS" 
 2610 IF MK>0 AND CASH>0 THEN PRINT "AND
 ";
 2620 PRINT:PRINT "YOU FOUND
@@ -456,125 +434,82 @@ it!"
 3340,3380,3450,3530,3620,3720,3790,3840,3920,3990,4060
 3330 RETURN
 3340 REM ROOM ONE
-3350 PRINT "You are out on the battlements of
-the"
-3360 PRINT "chateau. There is only one way
-back"
+3350 PRINT "You are out on the battlements of the"
+3360 PRINT "chateau. There is only one way back"
 3370 RETURN
 3380 REM ROOM TWO
-3390 PRINT "This is an eerie room, where
-once"
-3400 PRINT "magicians convorted with
-evil"
+3390 PRINT "This is an eerie room, where once"
+3400 PRINT "magicians convorted with evil"
 3410 PRINT "sprites and werebeasts..."
-3420 PRINT "Exits lead in three
-directions"
-3430 PRINT "An evil smell comes from the
-south"
+3420 PRINT "Exits lead in three directions"
+3430 PRINT "An evil smell comes from the south"
 3440 RETURN
 3450 REM ROOM THREE
-3460 PRINT "An old straw mattress lies in
-one"
-3470 PRINT "corner...it has been ripped apart
-to"
-3480 PRINT "find any treasure which was
-hidden in it"
-3490 PRINT "Light comes fitfully from a
-window to"
-3500 PRINT "the north, and around the doors
-to"
+3460 PRINT "An old straw mattress lies in one"
+3470 PRINT "corner...it has been ripped apart to"
+3480 PRINT "find any treasure which was hidden in it"
+3490 PRINT "Light comes fitfully from a window to"
+3500 PRINT "the north, and around the doors to"
 3510 PRINT "south, east and west"
 3520 RETURN
 3530 REM ROOM FOUR
-3540 PRINT "This wooden-panelled room
-makes"
-3550 PRINT "you feel damp and
-uncomfortable"
-3560 IF RND(1)>.5 THEN PRINT "A mouse
-scampers across the floor" ELSE PRINT "A
-bat flits across the ceiling"
-3570 PRINT "There are three doors
-leading"
-3580 PRINT "from this room, one made of
-iron"
-3590 PRINT "Your sixth sense warns you
-to"
+3540 PRINT "This wooden-panelled room makes"
+3550 PRINT "you feel damp and uncomfortable"
+3560 IF RND(1)>.5 THEN PRINT "A mouse scampers across the floor" ELSE PRINT "A bat flits across the ceiling"
+3570 PRINT "There are three doors leading"
+3580 PRINT "from this room, one made of iron"
+3590 PRINT "Your sixth sense warns you to"
 3600 PRINT "choose carefully..."
 3610 RETURN
 3620 REM ROOM FIVE
-3630 PRINT "You ignore your
-intuition..."
-3640 PRINT "A Spell of Living Stone,
-primed"
-3650 PRINT "to trap the first intruder
-has"
-3660 PRINT "been set on you...with your
-last"
-3670 PRINT "seconds of life you have
-time"
-3680 PRINT "only to feel profound
-regret..."
+3630 PRINT "You ignore your intuition..."
+3640 PRINT "A Spell of Living Stone, primed"
+3650 PRINT "to trap the first intruder has"
+3660 PRINT "been set on you...with your last"
+3670 PRINT "seconds of life you have time"
+3680 PRINT "only to feel profound regret..."
 3700 SC=50
 3710 GOTO 2590
 3720 REM ROOM SIX
 3730 PRINT "You are in an L-shaped room"
-3740 PRINT "Heavy parchment lines the
-walls"
-3750 PRINT "You can see through an
-archway"
-3760 PRINT "to the east...but that is
-not"
-3770 PRINT "the only exit from this
-room"
+3740 PRINT "Heavy parchment lines the walls"
+3750 PRINT "You can see through an archway"
+3760 PRINT "to the east...but that is not"
+3770 PRINT "the only exit from this room"
 3780 RETURN
 3790 REM ROOM SEVEN
-3800 PRINT "There is an archway to the
-west,"
+3800 PRINT "There is an archway to the west,"
 3810 PRINT "leading to an L-shaped room"
-3820 PRINT "a door leads in the opposite
-direction"
+3820 PRINT "a door leads in the opposite direction"
 3830 RETURN
 3840 REM ROOM EIGHT
-3850 PRINT "This must be the Chateau's main
-kitchen"
-3860 PRINT "but any food left here has
-long"
+3850 PRINT "This must be the Chateau's main kitchen"
+3860 PRINT "but any food left here has long"
 3870 PRINT "rotted away..."
 3880 PRINT
-3890 PRINT "A door leads to the north,
-and"
+3890 PRINT "A door leads to the north, and"
 3900 PRINT "there is one to the west"
 3910 RETURN
 3920 REM ROOM NINE
-3930 PRINT "You find yourself in a
-small,"
+3930 PRINT "You find yourself in a small,"
 3940 PRINT "room...which makes you feel"
 3950 PRINT "claustrophobic...":PRINT
-3960 PRINT "There is a picture of a
-black"
+3960 PRINT "There is a picture of a black"
 3970 PRINT "dragon painted on the north"
 3980 PRINT "wall, above the door..."
 3990 REM ROOM TEN
-4000 PRINT "A stairwell ends in this room,
-which"
-4010 PRINT "more of a landing than a
-real"
-4020 PRINT "room. The door to the north
-is"
-4030 PRINT "made of iron, which has
-rusted"
+4000 PRINT "A stairwell ends in this room, which"
+4010 PRINT "more of a landing than a real"
+4020 PRINT "room. The door to the north is"
+4030 PRINT "made of iron, which has rusted"
 4040 PRINT "over the centuries..."
 4050 RETURN
 4060 REM ROOM ELEVEN
-4070 PRINT "There is a stone archway to the
-north,"
-4080 PRINT "You are in a very long
-room."
-4090 PRINT:PRINT "Fresh air blows down some
-stairs"
-4100 PRINT "and rich red drapes cover
-4110 PRINT "the walls...You can see
-doors"
+4070 PRINT "There is a stone archway to the north,"
+4080 PRINT "You are in a very long room."
+4090 PRINT:PRINT "Fresh air blows down some stairs"
+4100 PRINT "and rich red drapes cover"
+4110 PRINT "the walls...You can see doors"
 4120 PRINT "to the south and east"
 4130 RETURN
 4140 IF RO>22 THEN 5030
@@ -582,132 +517,89 @@ doors"
 4170,4240,4330,4390,4460,4530,4610,4710,4760,4890,4970
 4160 RETURN
 4170 REM ROOM TWELVE
-4180 PRINT "You have entered a room
-filled"
-4190 PRINT "with swirling, choking
-smoke." :PRINT
-4200 PRINT "you must leave quickly to
-remain"
+4180 PRINT "You have entered a room filled"
+4190 PRINT "with swirling, choking smoke." :PRINT
+4200 PRINT "you must leave quickly to remain"
 4210 PRINT "healthy enough to continue"
 4220 PRINT "your chosen quest..."
 4230 RETURN
 4240 REM ROOM THIRTEEN
-4250 PRINT "There is a mirror in the
-corner"
+4250 PRINT "There is a mirror in the corner"
 4260 PRINT "you glance at it, and feel"
 4270 PRINT "suddenly very ill.":PRINT
-4280 PRINT "You realise the looking-glass
-has"
-4290 PRINT "been enfused with a Spell of
-Charisma"
+4280 PRINT "You realise the looking-glass has"
+4290 PRINT "been enfused with a Spell of Charisma"
 4300 PRINT "Reduction...oh dear..."
 4310 CH=CH-1
 4320 RETURN
 4330 REM ROOM FOURTEEN
-4340 PRINT "This room is richly finished,
-with"
-4350 PRINT "a white marble floor.
-Strange"
-4360 PRINT "footprints lead to the two
-doors"
-4370 PRINT "from this room...Dare you follow
-them?"
+4340 PRINT "This room is richly finished, with"
+4350 PRINT "a white marble floor. Strange"
+4360 PRINT "footprints lead to the two doors"
+4370 PRINT "from this room...Dare you follow them?"
 4380 RETURN
 4390 REM ROOM FIFTEEN
 4400 PRINT "You are in a long, long"
 4410 PRINT "hallway, lined on each side"
 4420 PRINT "with rich, red drapes..."
-4430 PRINT:PRINT "They are parted halfway
-down"
-4440 PRINT "the east wall where there is a
-door"
+4430 PRINT:PRINT "They are parted halfway down"
+4440 PRINT "the east wall where there is a door"
 4450 RETURN
 4460 REM ROOM SIXTEEN
-4470 PRINT "Someone has spent a long
-time"
-4480 PRINT "painting this room a bright
-yellow..."
-4490 PRINT:PRINT "You remember reading
-that"
-4500 PRINT "yellow Is the Ancient
-Oracle's"
+4470 PRINT "Someone has spent a long time"
+4480 PRINT "painting this room a bright yellow..."
+4490 PRINT:PRINT "You remember reading that"
+4500 PRINT "yellow Is the Ancient Oracle's"
 4510 PRINT "Color of Warning..."
 4520 RETURN
 4530 REM ROOM SEVENTEEN - START
-4540 PRINT "As you stumble down the
-ladder"
-4550 PRINT "you fall into the room. The
-ladder"
-4560 PRINT "crashes down behind
-you...there"
+4540 PRINT "As you stumble down the ladder"
+4550 PRINT "you fall into the room. The ladder"
+4560 PRINT "crashes down behind you...there"
 4570 PRINT "is now no way back..."
-4580 PRINT:PRINT "A small door leads east
-from"
+4580 PRINT:PRINT "A small door leads east from"
 4590 PRINT "this very cramped room..."
 4600 RETURN
 4610 REM ROOM EIGHTEEN
-4620 PRINT "You find yourself in a Hall
-of"
+4620 PRINT "You find yourself in a Hall of"
 4630 PRINT "Mirrors...and see yourself"
-4640 PRINT "reflected a hundred times
-or"
-4650 PRINT "more...Through the bright
-glare"
-4660 PRINT "you can make out doors in
-all"
+4640 PRINT "reflected a hundred times or"
+4650 PRINT "more...Through the bright glare"
+4660 PRINT "you can make out doors in all"
 4670 PRINT "directions...You notice the"
-4680 PRINT "mirrors around the east
-door"
+4680 PRINT "mirrors around the east door"
 4690 PRINT "are heavily tarnished..."
 4700 RETURN
 4710 REM ROOM NINETEEN
-4720 PRINT "You find yourself in a long
-corridor"
+4720 PRINT "You find yourself in a long corridor"
 4730 FOR Z=1 TO 1000:NEXT Z
-4740 PRINT "Your footsteps echo as you
-walk"
+4740 PRINT "Your footsteps echo as you walk"
 4750 RETURN
 4760 REM ROOM TWENTY
-4770 PRINT "You feel as you've been
-wandering"
-4780 PRINT "around this chateau for
-ever..."
-4790 PRINT "and you begin to despair of
-ever"
+4770 PRINT "You feel as you've been wandering"
+4780 PRINT "around this chateau for ever..."
+4790 PRINT "and you begin to despair of ever"
 4800 PRINT "escaping..."
-4810 PRINT:PRINT "Still, you can't get too
-depressed, but"
-4820 PRINT "must struggle on. Looking around,
-you"
-4830 PRINT "see you are in a room which has
-a"
-4840 PRINT "heavy timbered ceiling, and
-white"
+4810 PRINT:PRINT "Still, you can't get too depressed, but"
+4820 PRINT "must struggle on. Looking around, you"
+4830 PRINT "see you are in a room which has a"
+4840 PRINT "heavy timbered ceiling, and white"
 4850 PRINT "roughly-finished walls..."
-4860 PRINT:PRINT "There are two
-doors..."
+4860 PRINT:PRINT "There are two doors..."
 4870 FOR Z=1 TO 1000:NEXT Z
 4880 RETURN
 4890 REM ROOM TWENTY-ONE
-4900 PRINT "You are in a small alcove.
-You"
-4910 PRINT "look around...but can see nothing
-in"
-4920 PRINT "gloom...perhaps if you wait
-a"
-4930 PRINT "while your eyes will adjust to
-the"
-4940 PRINT "murky dark of this
-alcove..."
+4900 PRINT "You are in a small alcove. You"
+4910 PRINT "look around...but can see nothing in"
+4920 PRINT "gloom...perhaps if you wait a"
+4930 PRINT "while your eyes will adjust to the"
+4940 PRINT "murky dark of this alcove..."
 4950 FOR Z=1 TO 2000:NEXT:RETURN
 4960 RETURN
 4970 REM ROOM TWENTY-TWO
-4980 PRINT "A dried-up fountain stands in
-the"
-4990 PRINT "center of this courtyard,
-which"
-5000 PRINT "once held beautiful
-flowers...but"
+4980 PRINT "A dried-up fountain stands in the"
+4990 PRINT "center of this courtyard, which"
+5000 PRINT "once held beautiful flowers...but"
 5010 PRINT "have long-since died..."
 5020 RETURN
 5030 IF RO>33 THEN 5890
@@ -715,58 +607,41 @@ flowers...but"
 5060,5110,5160,5230,5280,5380,5450,5530,5590,5680,5840
 5050 RETURN
 5060 REM ROOM TWENTY-THREE
-5070 PRINT "The scent of dying flowers
-fills"
+5070 PRINT "The scent of dying flowers fills"
 5080 PRINT "this brightly-lit room..."
-5090 PRINT:PRINT "There are two exits from
-it.."
+5090 PRINT:PRINT "There are two exits from it.."
 5100 RETURN
 5110 REM ROOM TWENTY-FOUR
-5120 PRINT "This is a round stone
-cavern"
-5130 PRINT "off the side of the alcove
-to"
+5120 PRINT "This is a round stone cavern"
+5130 PRINT "off the side of the alcove to"
 5140 PRINT "your north..."
 5150 RETURN
 5160 REM ROOM TWENTY-FIVE
-5170 PRINT "You are in an enormous
-circular"
-5180 PRINT "room, which looks as if it
-was"
-5190 PRINT "used as a games room. Rubble
-covers"
-5200 PRINT "the floor, partially
-blocking"
+5170 PRINT "You are in an enormous circular"
+5180 PRINT "room, which looks as if it was"
+5190 PRINT "used as a games room. Rubble covers"
+5200 PRINT "the floor, partially blocking"
 5210 PRINT "the only exit..."
 5220 RETURN
 5230 REM ROOM TWENTY-SIX
-5240 PRINT "Through the dim mustiness
-of"
-5250 PRINT "this small potting shed you
-can"
+5240 PRINT "Through the dim mustiness of"
+5250 PRINT "this small potting shed you can"
 5260 PRINT "see a stairwell..."
 5270 RETURN
 5280 REM ROOM TWENTY-SEVEN - START
-5290 PRINT "You begin this Adventure in a
-small"
+5290 PRINT "You begin this Adventure in a small"
 5300 PRINT "wood outside the Chateau..."
 5310 FOR Z=1 TO 3000:NEXT Z
-5320 PRINT:PRINT "While out walking one day,
-you come"
-5330 PRINT "across a small, ramshackle shed
-in"
-5340 PRINT "the woods. Entering it, you see
-a"
-5350 PRINT "hole in one corner...an old
-ladder"
+5320 PRINT:PRINT "While out walking one day, you come"
+5330 PRINT "across a small, ramshackle shed in"
+5340 PRINT "the woods. Entering it, you see a"
+5350 PRINT "hole in one corner...an old ladder"
 5360 PRINT "leads down from the hole..."
 5370 RETURN
 5380 REM ROOM TWENTY-EIGHT - END
-5390 PRINT "How wonderful! Fresh air,
-sunlight..."
+5390 PRINT "How wonderful! Fresh air, sunlight..."
 5400 FOR Z=1 TO 1000:NEXT Z
-5410 PRINT:PRINT "Birds are
-singing...you"
+5410 PRINT:PRINT "Birds are singing...you"
 5420 PRINT "are free at last...."
 5430 PRINT:PRINT
 5440 GOTO 2560
@@ -779,32 +654,26 @@ singing...you"
 5510 QU=3.5
 5520 GOTO 2570
 5530 REM ROOM THIRTY
-5540 PRINT "You fall into a pit of
-flames..."
+5540 PRINT "You fall into a pit of flames..."
 5550 IF RND(1)>.7 THEN 5540
 5560 SC=10
 5570 QU=3.4
 5580 GOTO 2590
 5590 REM ROOM THIRTY-ONE
-5600 PRINT "Aaaaahhh...you have fallen
-into"
+5600 PRINT "Aaaaahhh...you have fallen into"
 5610 FOR Z=1 TO 3000:NEXT Z
-5620 PRINT "a pool of acid...now you know -
-too"
+5620 PRINT "a pool of acid...now you know - too"
 5630 PRINT "late - why the mirrors were"
 5640 PRINT "so badly tarnished"
 5650 SC=20
 5660 QU=3
 5670 GOTO 2590
 5680 REM ROOM THIRTY-TWO
-5690 PRINT "It's too bad you chose that
-exit"
+5690 PRINT "It's too bad you chose that exit"
 5700 PRINT "from the alcove..."
 5710 FOR Z=1 TO 2000:NEXT Z
-5720 PRINT "A giant Funnel-Web Spider
-leaps"
-5730 PRINT "on you...and before you can
-react"
+5720 PRINT "A giant Funnel-Web Spider leaps"
+5730 PRINT "on you...and before you can react"
 5740 PRINT "bites you on the neck...you"
 5750 PRINT "have 10 seconds to live..."
 5760 FOR T= 10 TO 1 STEP -1
@@ -816,10 +685,8 @@ react"
 5820 QU=5
 5830 GOTO 2590
 5840 REM ROOM THIRTY-THREE
-5850 PRINT "A stairwell leads into this room,
-a"
-5860 PRINT "poor and common hovel with
-many"
+5850 PRINT "A stairwell leads into this room, a"
+5860 PRINT "poor and common hovel with many"
 5870 PRINT "doors and exits..."
 5880 RETURN
 5890 ON RO-33 GOSUB
@@ -827,40 +694,30 @@ many"
 5900 RETURN
 5910 REM **DESCRIPTIONS**
 5920 REM ROOM THIRTY-FOUR
-5930 PRINT "It is hard to see in this
-room,"
-5940 PRINT "and you slip slightly on
-the"
+5930 PRINT "It is hard to see in this room,"
+5940 PRINT "and you slip slightly on the"
 5950 PRINT "uneven, rocky floor..."
 5960 RETURN
 5970 REM ROOM THIRTY-FIVE
 5980 PRINT "Horrors! This room was once"
-5990 PRINT "the torture chamber of the
-Chateau.."
-6000 PRINT:PRINT "Skeletons lie on the floor,
-still"
-6010 PRINT "with chains around the
-bones..."
+5990 PRINT "the torture chamber of the Chateau.."
+6000 PRINT:PRINT "Skeletons lie on the floor, still"
+6010 PRINT "with chains around the bones..."
 6020 RETURN
 6030 REM ROOM THIRTY-SIX
-6040 PRINT "Another room with very
-unpleasant"
+6040 PRINT "Another room with very unpleasant"
 6050 PRINT "memories..."
 6060 FOR Z=1 TO 1000:NEXT Z
-6070 PRINT:PRINT "This foul hole was used as
-the"
+6070 PRINT:PRINT "This foul hole was used as the"
 6080 PRINT "Chateau dungeon...."
 6090 RETURN
 6100 REM ROOM THIRTY-SEVEN
-6110 PRINT "Oh no, this is a Gargoyle's
-lair..."
+6110 PRINT "Oh no, this is a Gargoyle's lair..."
 6120 FOR Z=1 TO 1000:NEXT Z
-6130 PRINT "It has been held prisoner here
-for"
+6130 PRINT "It has been held prisoner here for"
 6140 PRINT "three hundred years..."
 6150 FOR Z=1 TO 1000:NEXT Z
-6160 PRINT:PRINT "In his frenzy he thrashes
-out at you..."
+6160 PRINT:PRINT "In his frenzy he thrashes out at you..."
 6170 FOR Z=1 TO 1000:NEXT Z
 6180 PRINT TAB(12);"and..."
 6190 FOR Z=1 TO 1000:NEXT Z
@@ -869,65 +726,44 @@ out at you..."
 6220 QU=3
 6230 GOTO 2590
 6240 REM ROOM THIRTY-EIGHT
-6250 PRINT "This was the Lower Dancing
-Hall..."
-6260 PRINT "With doors to the north, the
-east"
-6270 PRINT "and to the west, you would seem
-to be"
+6250 PRINT "This was the Lower Dancing Hall..."
+6260 PRINT "With doors to the north, the east"
+6270 PRINT "and to the west, you would seem to be"
 6280 PRINT "able to flee any danger..."
 6290 FOR Z=1 TO 1000:NEXT Z
 6300 RETURN
 6310 REM ROOM THIRTY-NINE
-6320 PRINT "This is a dingy pit at the foot
-of"
-6330 PRINT "some extremely
-dubious-looking"
-6340 PRINT "stairs. A door leads to the
-east..."
+6320 PRINT "This is a dingy pit at the foot of"
+6330 PRINT "some extremely dubious-looking"
+6340 PRINT "stairs. A door leads to the east..."
 6350 RETURN
 6360 REM ROOM FORTY
-6370 PRINT "Doors open to each compass point
-from"
-6380 PRINT "the Trophy Room of the
-Chateau..."
-6390 PRINT:PRINT "The heads of strange
-creatures shot"
-6400 PRINT "by the ancestral owners are
-mounted"
+6370 PRINT "Doors open to each compass point from"
+6380 PRINT "the Trophy Room of the Chateau..."
+6390 PRINT:PRINT "The heads of strange creatures shot"
+6400 PRINT "by the ancestral owners are mounted"
 6410 PRINT "high up on each wall..."
 6420 RETURN
 6430 REM ROOM FORTY-ONE
-6440 PRINT "You have stumbled on a secret
-room..."
+6440 PRINT "You have stumbled on a secret room..."
 6450 FOR Z=1 TO 1300:NEXT Z
-6460 PRINT:PRINT "Down here, eons ago, the
-ancient"
-6470 PRINT "Necromancers of Thorin plied
-their"
-6480 PRINT "evil craft...and the remnant
-of"
-6490 PRINT "their spells hangs heavy on the
-air..."
+6460 PRINT:PRINT "Down here, eons ago, the ancient"
+6470 PRINT "Necromancers of Thorin plied their"
+6480 PRINT "evil craft...and the remnant of"
+6490 PRINT "their spells hangs heavy on the air..."
 6500 RETURN
 6510 REM ROOM FORTY-TWO
-6520 PRINT "Cobwebs brush your face as you
-make"
-6530 PRINT "your way through the gloom of
-this"
+6520 PRINT "Cobwebs brush your face as you make"
+6530 PRINT "your way through the gloom of this"
 6540 PRINT "room of shadows..."
 6550 RETURN
 6560 REM ROOM FORTY-THREE
-6570 PRINT "This gloomy passage lies at
-the"
-6580 PRINT "intersection of three
-rooms..."
+6570 PRINT "This gloomy passage lies at the"
+6580 PRINT "intersection of three rooms..."
 6590 RETURN
 6600 REM ROOM FORTY-FOUR
-6610 PRINT "You are in the rear turret room,
-below"
-6620 PRINT "the extreme western wall of
-the"
+6610 PRINT "You are in the rear turret room, below"
+6620 PRINT "the extreme western wall of the"
 6630 PRINT "ancient chateau..."
 6640 RETURN
 6650 REM ****************

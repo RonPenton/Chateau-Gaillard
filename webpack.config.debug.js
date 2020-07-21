@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-   entry: './src/index.tsx',
+    entry: './src/index.tsx',
     mode: 'development',
     devtool: 'inline-source-map',
     module: {
@@ -14,6 +14,10 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: ['style-loader', 'css-loader']
+            },
+            {
+                test: /\.scss$/,
+                use: ['style-loader', 'css-loader', 'sass-loader']
             }
         ]
     },
