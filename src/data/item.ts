@@ -41,3 +41,11 @@ export const Items: { [key: string]: Item } = {
     ChestOfStone: { name: "Chest of Stone", value: 0, type: "chest" },
     ChestOfIron: { name: "Chest of Iron", value: 0, type: "chest" }
 };
+
+export const Fists: Weapon = {
+    name: "Fists",
+    value: 0,
+    type: 'weapon',
+    description: (m) => `YOU MUST FIGHT THE ${m.name.toUpperCase()} WITH YOUR BARE HANDS`,
+    strength: 0.5
+}

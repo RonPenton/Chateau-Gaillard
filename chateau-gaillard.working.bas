@@ -225,23 +225,15 @@ empty air!"
 1890 PRINT "RIGHT, SO YOU CHOOSE TO FIGHT":PRINT "WITH THE ";ITEMNAME(J)
 1900 FF=floor(FF*2/J)
 1910 FOR Z=1 TO 1500:NEXT Z
-1920 PRINT "THE ";G$;" HAS THE
-FOLLOWING ATTRIBUTES:"
-1930 PRINT "1 - Strength"S1"  2 -
-Charisma";H1
-1940 PRINT "3 - Dexterity"D1" 4 -
-Intelligence"I1
-1950 PRINT "5 - Wisdom"W1"    6 -
-Constitution"C1
+1920 PRINT "THE ";G$;" HAS THE FOLLOWING ATTRIBUTES:"
+1930 PRINT "1 - Strength"S1"  2 - Charisma";H1
+1940 PRINT "3 - Dexterity"D1" 4 - Intelligence"I1
+1950 PRINT "5 - Wisdom"W1"    6 - Constitution"C1
 1960 PRINT:PRINT "YOUR ATTRIBUTES ARE:"
-1970 PRINT "1 - Strength"ST"  2 -
-Charisma "CH
-1980 PRINT "3 - Dexterity"DE" 4 -
-Intelligence"IT
-1990 PRINT "5 - Wisdom"WI"    6 -
-Constitution"CO
-2000 PRINT:PRINT "Which attributes will you
-fight":PRINT "with (2)";
+1970 PRINT "1 - Strength"ST"  2 - Charisma "CH
+1980 PRINT "3 - Dexterity"DE" 4 - Intelligence"IT
+1990 PRINT "5 - Wisdom"WI"    6 - Constitution"CO
+2000 PRINT:PRINT "Which attributes will you fight":PRINT "with (2)";
 2010 INPUT Z,Q
 2020 IF Z<1 OR Q<1 OR Z>6 OR Q>6 OR
 Z=Q THEN PRINT "DO NOT FOOL AROUND WHEN A
