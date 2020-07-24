@@ -558,6 +558,10 @@ export class App extends React.Component<{}, ClientState> {
             });
         }
 
+        const exits = room.exits.map(x => x.direction).join(", ");
+        await this.addOutput("");
+        await this.addOutput(`Exits: ${exits}`);
+
         if (room.event) {
             room.event(player);
         }
