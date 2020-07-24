@@ -49,6 +49,11 @@ export class App extends React.Component<{}, ClientState> {
         };
 
         setTimeout(async () => {
+            await this.addOutput("Chateau Gaillard");
+            await this.addOutput("This is a port of the \"Chateau Gaillard\" listing from Tim Hartnell's 1983 book \"Creating Adventure Games On Your Computer\".");
+            await this.addOutput("The Original BASIC source is taken from https://www.atariarchives.org/adventure/chapter22.php");
+            await this.addOutput("");
+            await this.addOutput("");
             await this.showReport();
         }, 1000);
     }
