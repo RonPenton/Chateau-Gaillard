@@ -145,8 +145,9 @@ export class App extends React.Component<{}, ClientState> {
         if (isDead(player.stats)) {
             await this.addOutput("You are exhausted...");
             await this.addOutput("so this adventure must end");
+            player.dead = true;
             player.quitQuotient = 2;
-            return;//TODO
+            return;
         }
 
         await this.showInventory(player);
