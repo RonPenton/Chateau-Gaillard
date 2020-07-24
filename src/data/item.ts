@@ -14,7 +14,7 @@ export type Weapon = BaseItem & {
 }
 
 export type GenericItem = BaseItem & {
-    type: "treasure" | "heals" | "special" | "key" | "chest";
+    type: "treasure" | "potion" | "scroll" | "key" | "chest" | "amulet";
 }
 
 export type Item = Weapon | GenericItem;
@@ -28,11 +28,11 @@ export const Items: { [key: string]: Item } = {
     MorningStar: { name: "Morning Star", value: 0, type: "weapon", description: (m) => `SWINGING YOUR MORNING STAR MAY INFLICT HEAVY WOUNDS ON THE ${m.name.toUpperCase()}`, strength: 6 },
     Falchion: { name: "Falchion", value: 0, type: "weapon", description: "A FALCHION IS A USEFUL WEAPON", strength: 7 },
     CrystalBall: { name: "Crystal Ball", value: 99, type: "treasure" },
-    Amulet: { name: "Amulet", value: 247, type: "treasure" },
+    Amulet: { name: "Amulet", value: 247, type: "amulet" },
     EbonyRing: { name: "Ebony Ring", value: 166, type: "treasure" },
     Gems: { name: "Gems", value: 462, type: "treasure" },
-    MysticScroll: { name: "Mystic Scroll", value: 195, type: "special" },
-    HealingPotion: { name: "Healing Potion", value: 231, type: "heals" },
+    MysticScroll: { name: "Mystic Scroll", value: 195, type: "scroll" },
+    HealingPotion: { name: "Healing Potion", value: 231, type: "potion" },
     DilithiumCrystals: { name: "Dilithium Crystals", value: 162, type: "treasure" },
     CopperPieces: { name: "Copper Pieces", value: 27, type: "treasure" },
     Diadem: { name: "Diadem", value: 141, type: "treasure" },

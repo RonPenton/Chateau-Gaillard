@@ -4,8 +4,8 @@ import Random from 'ts-random';
 import { monsterTemplates, randomize as randomizeMonster, Monster } from './monster';
 import { Player } from './player';
 
-const directions = ['north', 'south', 'east', 'west', 'up', 'down'] as const;
-const shortDirections = ['n', 's', 'e', 'w', 'u', 'd'] as const;
+export const directions = ['north', 'south', 'east', 'west', 'up', 'down'] as const;
+export const shortDirections = ['n', 's', 'e', 'w', 'u', 'd'] as const;
 import { delay } from '../delay';
 
 type Direction = typeof directions[number];
@@ -312,7 +312,7 @@ const rooms: Room[] = [
         name: "Ramshackle Shed",
         description: async ({ print }) => {
             await print("You begin this Adventure in a small wood outside the Chateau...");
-            await delay(3000);
+            await delay(1000);
             await print("While out walking one day, you come across a small, ramshackle shed in the woods. Entering it, you see a hole in one corner...an old ladder leads down from the hole...");
         },
         items: [],
@@ -344,6 +344,7 @@ const rooms: Room[] = [
             await print("One springs shut on you, trapping you forever");
         },
         event: (player) => {
+            player.score = 100;
             player.quitQuotient = 3.5;
             player.dead = true;
         },

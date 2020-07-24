@@ -33,9 +33,15 @@ export class OutputArea extends React.Component<OutputAreaProps> {
                 onMouseDown={this.onMouseDown}
                 onMouseUp={this.onMouseUp}
                 ref={(input) => this.div = input}>
-                {this.props.outputs.map(x => <div key={x.id}>{x.text}</div>)}
+                {this.props.outputs.map(x => this.renderItem(x))}
             </div>
         );
+    }
+
+    renderItem(text: OutputText) {
+        if (text.text.length > 0)
+            return <div key={text.id}>{text.text}</div>
+        return <div dangerouslySetInnerHTML={{__html: '&nbsp;'}} key={text.id} />
     }
 
     @bind

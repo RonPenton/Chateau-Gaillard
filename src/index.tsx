@@ -7,15 +7,17 @@ import { InputArea } from "./InputArea";
 import { OutputText } from "./OutputArea";
 
 import './index.scss';
-import { Room, getRooms } from "./data/room";
+import { Room, getRooms, shortDirections, directions } from "./data/room";
 import Random from "ts-random";
-import { randomize as randomizePlayer, Player } from './data/player';
+import { randomize as randomizePlayer, Player, getCash } from './data/player';
 import { Monster } from "./data/monster";
 import cloneDeep from "clone-deep";
 import { delay } from "./delay";
-import _, { first } from 'lodash';
+import _ from 'lodash';
 import { Weapon, Fists } from "./data/item";
 import { Stats, statNames, isDead } from "./data/stats";
+import { _in } from "./in";
+import { leftEquals } from "./leftEquals";
 
 
 export interface ClientState {
@@ -114,22 +116,25 @@ export class App extends React.Component<{}, ClientState> {
         const room = map.filter(x => x.id == player.room)[0];
 
         const context = { player, room, map };
+        await this.addOutput("");
         await this.showRoom(context);
 
         if (player.dead) {
-            await this.addOutput("You died!");
-            return; //TODO
+            await this.showFinalScore(player);
+            return;
         }
         if (player.win) {
-            await this.addOutput("You win!");
-            return;//TODO
+            await this.addOutput(`CONGRATULATIONS! You have completed THE ADVENTURE`);
+            player.score = 100;
+            await this.showFinalScore(player);
+            return;
         }
 
         await this.showItems(context);
         await this.showLocked(context);
         const stop = await this.showMonster(context);
         if (stop) {
-            // TODO: read input loop.
+            await this.startLoop(context);
             return;
         }
 
@@ -145,6 +150,350 @@ export class App extends React.Component<{}, ClientState> {
         }
 
         await this.showInventory(player);
+        await this.startLoop(context);
+    }
+
+    private async startLoop(ctx: Context): Promise<void> {
+        const { map, player, room } = ctx;
+        await this.addOutput("What do you want to do? ");
+        const input = await this.getInput();
+
+        const tokens = input.split(' ');
+        const cmd = tokens[0].toLowerCase().substr(0, 3);
+
+        if (cmd == 'hel') {
+            await this.addOutput("NO HELP FOR MORTALS IN THIS GAME!");
+            await this.addOutput("...although reading and drinking may help...");
+        }
+        else if (_in(cmd, 'sta', 'kil', 'fig', 'kic', 'pun', 'sla', 'att')) {
+            if (!room.monster) {
+                random.chance(50)
+                    ? await this.addOutput("There is nothing to fight here")
+                    : await this.addOutput("You can't fight empty air!");
+            }
+            else {
+                await this.performAttack(ctx, room.monster);
+            }
+        }
+        else if (cmd == 'unl' && room.requiresKey) {
+            await this.unlock(ctx);
+        }
+        else if (room.requiresKey) {
+            await this.addOutput("** The doors are locked **");
+        }
+        else if (_in(cmd, 'go', 'mov', 'cli', 'run', 'wal') && tokens.length > 1) {
+            await this.move(ctx, tokens[1]);
+        }
+        else if (_in(cmd, 'n', 'nor', 's', 'sou', 'e', 'eas', 'w', 'wes', 'u', 'up', 'd', 'dow')) {
+            await this.move(ctx, cmd);
+        }
+        else if (_in(cmd, 'tak', 'get', 'ste', 'lif') && tokens.length > 1) {
+            await this.getItem(ctx, tokens[1]);
+        }
+        else if (_in(cmd, 'dro', 'put', 'thr', 'bre') && tokens.length > 1) {
+            await this.dropItem(ctx, tokens[1]);
+        }
+        else if (cmd == 'ope' && tokens.length > 1) {
+            await this.openChest(ctx, tokens[1]);
+        }
+        else if (cmd == 'rea' && tokens.length > 1) {
+            await this.readScroll(ctx, tokens[1]);
+        }
+        else if(_in(cmd, 'fri', 'swa') && tokens.length > 1) {
+            await this.drink(ctx, tokens[1]);
+        }
+        else if(_in(cmd, 'bri', 'pay') && tokens.length > 1) {
+            await this.bribe(ctx, tokens[1]);
+        }
+        else {
+            const text = random.pick([
+                `IT WOULD NOT BE WISE TO ${input}`,
+                `ONLY A FOOL WOULD TRY TO ${input}`,
+                `I DON'T UNDERSTAND ${input}`
+            ]);
+            await this.addOutput(text);
+        }
+
+        if (player.dead) {
+            await this.showFinalScore(player);
+            return;
+        }
+
+        this.setState({
+            map, 
+            player
+        }, () => {
+            this.showReport();
+        });
+    }
+
+    private async bribe(ctx: Context, monsterName: string) {
+        const { player, room } = ctx;
+
+        const monster = room.monster;
+
+        if(!monster) {
+            await this.addOutput("There is nothing in this room to bribe!");
+            return;
+        }
+
+        if (!leftEquals(monsterName, monster.name)) {
+            await this.addOutput("You do not see that here!");
+            return;
+        }
+
+        if(monster.name != "Dwarf") {
+            await this.addOutput(`YOU SHOULDN'T TRY THAT WITH A ${monster.name.toUpperCase()}`);
+            return;
+        }
+
+        await this.addOutput("He demands the amulet!");
+        const amulets = player.items.filter(x => x.type == 'amulet');
+
+        if(amulets.length == 0) {
+            await this.addOutput("YOU DO NOT HAVE IT...");
+            await delay(1000);
+            if(random.chance(50)) {
+                await this.addOutput("HE WOULD ACCEPT ANYTHING THAT HE REALLY WANTS...");
+                await delay(2000);
+                await this.addOutput("");
+                await this.addOutput("BUT YOU HAVE NOTHING HE WANTS");
+                await this.addOutput("AND SO HE KILLS YOU!!");
+                player.quitQuotient = 3;
+                player.dead = true;
+                return;
+            }
+
+            await this.addOutput("HE DECIDES, HOWEVER, TO ACCEPT A 'GIFT' OF ");
+            if(player.items.length == 0) {
+                await this.addOutput("ANYTHING VALUABLE...")
+                await delay(2000);
+                await this.addOutput("BUT YOU HAVE NOTHING");
+                await this.addOutput("AND SO HE KILLS YOU!!");
+                player.quitQuotient = 3;
+                player.dead = true;
+                return;
+            }
+
+            const item = random.pick(player.items);
+            await this.addOutput(item.name.toUpperCase());
+            player.items = player.items.filter(x => x != item);
+        }
+        else {
+            await this.addOutput("Lucky for you that you had it!");
+            player.items = player.items.filter(x => x != amulets[0]);
+        }
+
+        room.monster = undefined;
+    }
+
+    private async drink(ctx: Context, itemName: string) {
+        const { player, room } = ctx;
+
+        if (player.items.length == 0) {
+            await this.addOutput("You are not holding anything which you can drink!");
+            return;
+        }
+
+        const items = player.items.filter(x => leftEquals(itemName, x.name));
+        if (items.length == 0) {
+            await this.addOutput("You do not have that!");
+            return;
+        }
+
+        const item = items[0];
+        if (item.type != 'potion') {
+            await this.addOutput("You cannot drink that!");
+            return;
+        }
+
+        await this.addOutput("You are instantly filled with healing, and your strength is restored");
+        await this.addOutput("The bottle holding the potion magically fades from view...");
+        player.items = player.items.filter(x => x != item);
+    }
+
+
+    private async readScroll(ctx: Context, itemName: string) {
+        const { player, room } = ctx;
+
+        if (player.items.length == 0) {
+            await this.addOutput("You are not holding anything which you can read");
+            return;
+        }
+
+        const items = player.items.filter(x => leftEquals(itemName, x.name));
+        if (items.length == 0) {
+            await this.addOutput("You do not have that!");
+            return;
+        }
+
+        const item = items[0];
+        if (item.type != 'scroll') {
+            await this.addOutput("You cannot read that!");
+            return;
+        }
+
+        const text = random.pick([
+            "It says 'THE LOCKS NEED SPECIAL KEYS'",
+            "The scroll reads:'CHESTS CAN CONTAIN AID'",
+            "It says 'THE AMULET IS IMPORTANT'"
+        ]);
+
+        await this.addOutput(text);
+    }
+
+    private async openChest(ctx: Context, itemName: string) {
+        const { player, room } = ctx;
+
+        if (room.items.length == 0) {
+            await this.addOutput("I CANNOT SEE ANYTHING TO OPEN HERE");
+            return;
+        }
+
+        const items = room.items.filter(x => leftEquals(itemName, x.name));
+        if (items.length == 0) {
+            await this.addOutput("You do not see that here!");
+            return;
+        }
+
+        const item = items[0];
+        if (item.type != 'chest') {
+            await this.addOutput("THAT WOULD NOT BE WISE");
+            return;
+        }
+
+        if (player.foundChest) {
+            random.chance(40)
+                ? await this.addOutput("It holds nothing but dust...")
+                : await this.addOutput("IT IS EMPTY!");
+        }
+        else {
+            await this.addOutput("INSIDE YOU FIND A PARCHMENT, WITH THE FOLLOWING MESSAGE: ");
+            await this.addOutput("'A little man can be bound by gold'");
+            player.foundChest = true;
+        }
+
+        room.items = room.items.filter(x => x != item);
+    }
+
+    private async getItem(ctx: Context, itemName: string) {
+        const { player, room } = ctx;
+
+        if (player.items.length == 5) {
+            await this.addOutput("You are already carrying your maximum of five objects");
+            return;
+        }
+
+        if (room.items.length == 0) {
+            await this.addOutput("I see nothing to pick up");
+            return;
+        }
+
+        const items = room.items.filter(x => leftEquals(itemName, x.name));
+        if (items.length == 0) {
+            await this.addOutput("You do not see that here!");
+            return;
+        }
+
+        const item = items[0];
+        if (item.type == 'chest') {
+            await this.addOutput("It is far too heavy to lift");
+            return;
+        }
+
+        player.items.push(item);
+        room.items = room.items.filter(x => x != item);
+        await this.addOutput(`>->YOU NOW HAVE THE ${item.name.toUpperCase()}`);
+    }
+
+    private async dropItem(ctx: Context, itemName: string) {
+        const { player, room } = ctx;
+
+        if (player.items.length == 0) {
+            await this.addOutput("You are not carrying anything");
+            return;
+        }
+
+        if (room.items.length == 3) {
+            await this.addOutput("This room already holds its maximum objects");
+            return;
+        }
+
+        const items = room.items.filter(x => leftEquals(itemName, x.name));
+        if (items.length == 0) {
+            await this.addOutput("How can you when you're not holding it?");
+            return;
+        }
+
+        const item = items[0];
+        room.items.push(item);
+        player.items = player.items.filter(x => x != item);
+        await this.addOutput(`YOU HAVE DROPPED THE ${item.name.toUpperCase()}`);
+    }
+
+
+    private async unlock(ctx: Context) {
+        const { player, room } = ctx;
+        if (!player.items.some(x => x == room.requiresKey)) {
+            await this.addOutput("You do not have the right key!");
+            return;
+        }
+
+        await this.addOutput("There is a creak as the key turns...");
+        player.items = player.items.filter(x => x != room.requiresKey);
+        room.requiresKey = undefined;
+        await delay(1300);
+        await this.addOutput(".....THE DOOR IS NOW UNLOCKED...");
+    }
+
+    private async move(ctx: Context, dir: string) {
+        if (!dir || dir == "") {
+            await this.addOutput("You must specify a direction");
+            return;
+        }
+
+        const { map, player, room } = ctx;
+        if (room.monster && room.monster.name == "Dwarf") {
+            await this.addOutput("The dwarf refuses to let you proceed...");
+            return;
+        }
+
+        const d = dir[0];
+        const idx = shortDirections.findIndex(x => x == d);
+        if (idx == -1) {
+            await this.addOutput("I don't know how to move in that direction!");
+            return;
+        }
+
+        const direction = directions[idx];
+        const exit = room.exits.find(x => x.direction == direction);
+        if (!exit) {
+            await this.addOutput("You cannot go that way");
+            return;
+        }
+
+        player.room = exit.room;
+    }
+
+    private async showFinalScore(player: Player): Promise<void> {
+        const cash = getCash(player);
+        const score = (player.score +
+            20 * cash +
+            47 * player.killed +
+            player.stats.strength +
+            player.stats.charisma * 2 +
+            player.stats.dexterity * 3 +
+            player.stats.intelligence * 4 +
+            player.stats.wisdom * 5 +
+            player.stats.constitution * 6) / player.quitQuotient;
+
+        if (player.killed > 0) {
+            await this.addOutput(`YOU KILLED ${player.killed} MONSTERS`);
+        }
+        if (cash > 0) {
+            await this.addOutput(`YOU FOUND $${cash} WORTH OF TREASURE`);
+        }
+        await this.addOutput(`Your score for this Adventure is ${score}`);
     }
 
     private async showInventory(player: Player): Promise<void> {
@@ -157,7 +506,7 @@ export class App extends React.Component<{}, ClientState> {
             await this.addOutput(`    ${item.name}`);
         }
 
-        const cash = _.sumBy(player.items, x => x.value);
+        const cash = getCash(player);
         if (cash > 0) {
             await this.addOutput(`        TotalValue: \$${cash}`);
         }
@@ -166,9 +515,9 @@ export class App extends React.Component<{}, ClientState> {
     private async showStats(stats: Stats): Promise<void> {
         await this.addOutput("");
         await this.addOutput("Your attributes are:");
-        await this.addOutput(`    Strength - ${stats.strength}  Charisma - ${stats.charisma}`);
-        await this.addOutput(`    Dexterity - ${stats.dexterity}  Intelligence - ${stats.intelligence}`);
-        await this.addOutput(`    Wisdom - ${stats.wisdom}  Constitution - ${stats.constitution}`);
+        await this.addOutput(`    Strength - ${stats.strength}     Charisma - ${stats.charisma}`);
+        await this.addOutput(`    Dexterity - ${stats.dexterity}     Intelligence - ${stats.intelligence}`);
+        await this.addOutput(`    Wisdom - ${stats.wisdom}     Constitution - ${stats.constitution}`);
     }
 
     private async showHint(room: Room): Promise<void> {
@@ -210,6 +559,7 @@ export class App extends React.Component<{}, ClientState> {
 
     private async showItems({ room }: Context): Promise<void> {
         if (room.items.length == 0) return;
+        await this.addOutput("");
         await this.addOutput(`YOU CAN SEE ${room.items.map(x => x.name).join(', ')}`);
     }
 
@@ -260,14 +610,14 @@ export class App extends React.Component<{}, ClientState> {
         //const danger = (initialDanger * 2) / weapon.strength;
 
         await this.addOutput(`THE ${monster.name.toUpperCase()} HAS THE FOLLOWING ATTRIBUTES:`);
-        await this.addOutput(`1 - Strength ${monster.stats.strength}  2 - Charisma ${monster.stats.charisma}`);
-        await this.addOutput(`3 - Dexterity ${monster.stats.dexterity} 4 - Intelligence ${monster.stats.intelligence}`);
-        await this.addOutput(`5 - Wisdom ${monster.stats.wisdom}   6 - Constitution ${monster.stats.constitution}`);
+        await this.addOutput(`1 - Strength ${monster.stats.strength.toString().padStart(2, ' ')}     2 - Charisma ${monster.stats.charisma}`);
+        await this.addOutput(`3 - Dexterity ${monster.stats.dexterity.toString().padStart(2, ' ')}    4 - Intelligence ${monster.stats.intelligence}`);
+        await this.addOutput(`5 - Wisdom ${monster.stats.wisdom.toString().padStart(2, ' ')}       6 - Constitution ${monster.stats.constitution}`);
         await this.addOutput("");
         await this.addOutput("YOUR ATTRIBUTES ARE:");
-        await this.addOutput(`1 - Strength ${player.stats.strength}  2 - Charisma ${player.stats.charisma}`);
-        await this.addOutput(`3 - Dexterity ${player.stats.dexterity} 4 - Intelligence ${player.stats.intelligence}`);
-        await this.addOutput(`5 - Wisdom ${player.stats.wisdom}   6 - Constitution ${player.stats.constitution}`);
+        await this.addOutput(`1 - Strength ${player.stats.strength.toString().padStart(2, ' ')}     2 - Charisma ${player.stats.charisma}`);
+        await this.addOutput(`3 - Dexterity ${player.stats.dexterity.toString().padStart(2, ' ')}    4 - Intelligence ${player.stats.intelligence}`);
+        await this.addOutput(`5 - Wisdom ${player.stats.wisdom.toString().padStart(2, ' ')}       6 - Constitution ${player.stats.constitution}`);
         await this.addOutput("");
 
         await this.addOutput("Which attribute will you fight with (#1)?");
@@ -404,7 +754,7 @@ export class App extends React.Component<{}, ClientState> {
     private async readNumber(min: number, max: number, condition?: (x: number) => boolean): Promise<number> {
         condition = condition ?? ((x) => false);
         let input = parseInt(await this.getInput());
-        while (!isNaN(input) || input < min || input > max || condition(input)) {
+        while (isNaN(input) || input < min || input > max || condition(input)) {
             await this.addOutput(`Please enter a number between ${min} and ${max}`);
             input = parseInt(await this.getInput());
         }
