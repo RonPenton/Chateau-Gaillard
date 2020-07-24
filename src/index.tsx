@@ -515,9 +515,9 @@ export class App extends React.Component<{}, ClientState> {
     private async showStats(stats: Stats): Promise<void> {
         await this.addOutput("");
         await this.addOutput("Your attributes are:");
-        await this.addOutput(`    Strength - ${stats.strength}     Charisma - ${stats.charisma}`);
-        await this.addOutput(`    Dexterity - ${stats.dexterity}     Intelligence - ${stats.intelligence}`);
-        await this.addOutput(`    Wisdom - ${stats.wisdom}     Constitution - ${stats.constitution}`);
+        await this.addOutput(`    Strength - ${stats.strength.toString().padStart(2, ' ')}     Charisma - ${stats.charisma}`);
+        await this.addOutput(`    Dexterity - ${stats.dexterity.toString().padStart(2, ' ')}    Intelligence - ${stats.intelligence}`);
+        await this.addOutput(`    Wisdom - ${stats.wisdom.toString().padStart(2, ' ')}       Constitution - ${stats.constitution}`);
     }
 
     private async showHint(room: Room): Promise<void> {

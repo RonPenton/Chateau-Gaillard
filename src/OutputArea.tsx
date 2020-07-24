@@ -39,9 +39,17 @@ export class OutputArea extends React.Component<OutputAreaProps> {
     }
 
     renderItem(text: OutputText) {
-        if (text.text.length > 0)
-            return <div key={text.id}>{text.text}</div>
-        return <div dangerouslySetInnerHTML={{__html: '&nbsp;'}} key={text.id} />
+
+        let t = text.text;
+        let match: RegExpExecArray | null = null;
+        while(match = /[\s]{2,}/g.exec(t)) {
+            const filler = Array(match[0].length).fill('&nbsp;').join('');
+            t = t.replace(match[0], filler);
+        }
+
+        if (t.length > 0)
+            return <div key={text.id} dangerouslySetInnerHTML={{ __html: t }} />
+        return <div dangerouslySetInnerHTML={{ __html: '&nbsp;' }} key={text.id} />
     }
 
     @bind

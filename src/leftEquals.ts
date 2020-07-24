@@ -1,11 +1,10 @@
 import _ from 'lodash';
 
 export function leftEquals(first: string, second: string): boolean {
-    debugger;
     first = first.trim();
     let seconds = second.trim().split(' ');
     const secondmin = (_.minBy(seconds, x => x.length) ?? "").length;
-    const minlen = Math.max(first.length, secondmin);
+    const minlen = Math.min(first.length, secondmin);
 
     if(minlen == 0) {
         throw new Error("Something went really wrong here");
