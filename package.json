@@ -34,7 +34,7 @@
   "dependencies": {
     "clone-deep": "^4.0.1",
     "decko": "^1.2.0",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "sass": "^1.26.10",
